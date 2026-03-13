@@ -1,0 +1,178 @@
+/* Marks Container */
+:root {
+    --color-black-10: rgba(0, 0, 0, 0.1);
+    --color-dark-blue: #2c3e50;
+    --color-gray-200: #e8e8e8;
+    --color-gray-300: #d0d0d0;
+    --color-gray-400: #bdc3c7;
+    --color-gray-500: #999;
+    --color-gray-500-soft: #999;
+    --color-gray-600: #666;
+    --color-gray-700: #efefef;
+    --color-gray-800: #f5f5f5;
+    --color-teal: #1abc9c;
+    --color-teal-10: rgba(26, 188, 156, 0.1);
+    --color-white: white;
+}
+
+.marks-container {
+    display: none !important;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.marks-container.active {
+    display: flex !important;
+}
+
+/* Marks Header */
+.marks-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 20px 15px 20px;
+    border-bottom: 1px solid var(--color-black-10);
+}
+
+.marks-back-btn {
+    background: none;
+    border: none;
+    color: var(--color-dark-blue);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.marks-back-btn:hover {
+    transform: scale(1.2);
+}
+
+.marks-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--color-dark-blue);
+}
+
+/* Search Bar */
+.marks-search {
+    padding: 0 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--color-teal);
+    box-shadow: 0 0 0 3px var(--color-teal-10);
+}
+
+.search-input::placeholder {
+    color: var(--color-gray-400);
+}
+
+/* Filters */
+.marks-filters {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.marks-filters::-webkit-scrollbar {
+    height: 4px;
+}
+
+.marks-filters::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.marks-filters::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: 2px;
+}
+
+.filter-btn {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    background-color: var(--color-gray-800);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-gray-600);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    background-color: var(--color-gray-700);
+}
+
+.filter-btn.active {
+    background-color: var(--color-teal);
+    color: var(--color-white);
+    border-color: var(--color-teal);
+}
+
+/* Marks List */
+.marks-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+    padding-bottom: 20px;
+}
+
+.marks-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.marks-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.marks-list::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: 3px;
+}
+
+.marks-list::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-500);
+}
+
+.marks-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.marks-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: var(--color-gray-500-soft);
+    font-size: 14px;
+}
+
+.marks-empty p {
+    margin: 0;
+}

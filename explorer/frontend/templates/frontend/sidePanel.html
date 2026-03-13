@@ -1,0 +1,38 @@
+<button class="sidebar-toggle" @click="sidebarOpen = !sidebarOpen">
+    <span v-if="sidebarOpen">✕</span>
+    <span v-else>☰</span>
+</button>
+
+<div class="sidebar" :class="{ open: sidebarOpen, expanded: showProfile || showMarks }">
+    <!-- Основное меню -->
+    <div class="sidebar-title"></div>
+    <div class="sidebar-buttons" v-if="!showProfile && !showMarks">
+
+        <div class="button-item">
+            <button class="sidebar-button" @click="handleListMarks"></button>
+            <span class="button-text">Список меток</span>
+        </div>
+
+        <div class="button-item">
+            <button class="sidebar-button" @click="handleAddMark"></button>
+            <span class="button-text">Добавить метку</span>
+        </div>
+
+        <div class="button-item">
+            <button class="sidebar-button" @click="handleProfile"></button>
+            <span class="button-text">Профиль</span>
+        </div>
+
+        <div class="button-item">
+            <button class="sidebar-button" @click="handleRating"></button>
+            <span class="button-text">Рейтинг</span>
+        </div>
+    </div>
+
+    <!-- Список меток -->
+    {% include "frontend/marks.html" %}
+
+    <!-- Профиль -->
+    {% include "frontend/profile.html" %}
+</div>
+

@@ -1,0 +1,64 @@
+<div class="marks-container" :class="{ active: showMarks }">
+    <!-- Marks Header -->
+    <div class="marks-header">
+        <button class="marks-back-btn" @click="handleBackToMenu">
+            <span>←</span>
+        </button>
+        <h2>Список меток</h2>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="marks-search">
+        <input
+            type="text"
+            class="search-input"
+            placeholder="Поиск меток..."
+            v-model="searchQuery"
+            @input="updateFilteredMarks"
+        >
+    </div>
+
+    <!-- Filters -->
+    <div class="marks-filters">
+        <button
+            class="filter-btn"
+            :class="{ active: activeFilter === 'all' }"
+            @click="activeFilter = 'all'; updateFilteredMarks()"
+        >
+            Все
+        </button>
+        <button
+            class="filter-btn"
+            :class="{ active: activeFilter === 'cafe' }"
+            @click="activeFilter = 'cafe'; updateFilteredMarks()"
+        >
+            ☕ Кафе
+        </button>
+        <button
+            class="filter-btn"
+            :class="{ active: activeFilter === 'bench' }"
+            @click="activeFilter = 'bench'; updateFilteredMarks()"
+        >
+            🪑 Скамейки
+        </button>
+        <button
+            class="filter-btn"
+            :class="{ active: activeFilter === 'art' }"
+            @click="activeFilter = 'art'; updateFilteredMarks()"
+        >
+            🎨 Арт
+        </button>
+    </div>
+
+    <!-- Marks List -->
+    <div class="marks-list">
+        <div v-if="filteredMarks.length > 0" class="marks-items">
+            <div v-for="(mark, index) in filteredMarks" :key="index" @click="handleSelectMark(mark)">
+                {% include "frontend/mark.html" %}
+            </div>
+        </div>
+        <div v-else class="marks-empty">
+            <p>Метки не найдены</p>
+        </div>
+    </div>
+</div>

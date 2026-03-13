@@ -1,0 +1,67 @@
+<div class="profile-container" :class="{ active: showProfile }">
+    <!-- Профиль Header -->
+    <div class="profile-header">
+        <button class="profile-back-btn" @click="handleBackToMenu">
+            <span>←</span>
+        </button>
+        <h2>Профиль</h2>
+    </div>
+
+    <!-- Информация пользователя -->
+    <div class="profile-info">
+        <div class="profile-avatar">
+            <img src="#" alt="Аватар">
+        </div>
+        <div class="profile-details">
+            <h3>Сергей Ф.</h3>
+            <p class="profile-username">@serg_explorer</p>
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="profile-stats">
+        <div class="stat-item">
+            <div class="stat-number">23</div>
+            <div class="stat-label">районов</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">47</div>
+            <div class="stat-label">меток</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">мест</div>
+        </div>
+    </div>
+
+    <!-- Быстрые действия -->
+    <div class="profile-actions">
+        <button class="action-btn">
+            <span class="action-icon">📋</span>
+            <span>Мои метки</span>
+        </button>
+        <button class="action-btn">
+            <span class="action-icon">⚙️</span>
+            <span>Настройки</span>
+        </button>
+        <button class="action-btn">
+            <span class="action-icon">🏆</span>
+            <span>Рейтинг</span>
+        </button>
+    </div>
+
+    <!-- Достижения -->
+    <div class="profile-achievements">
+        <h4>Достижения</h4>
+        <div class="achievements-list">
+            <div class="achievement">
+                <span class="achievement-icon">🔥</span>
+                <span class="achievement-text">Первооткрыватель</span>
+            </div>
+            <div class="achievement">
+                <span class="achievement-icon">📷</span>
+                <span class="achievement-text">Фотограф</span>
+            </div>
+        </div>
+    </div>
+</div>
