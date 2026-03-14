@@ -11,10 +11,9 @@ const sidePanelHandlers = {
 
     handleAddMark() {
         console.log('Добавить метку clicked');
-        this.sidebarOpen = false;
+        this.showAddMark = true;
         this.showProfile = false;
         this.showMarks = false;
-        // Add your logic here
     },
 
     handleProfile() {
@@ -27,6 +26,7 @@ const sidePanelHandlers = {
         console.log('Back to menu clicked');
         this.showProfile = false;
         this.showMarks = false;
+        this.showAddMark = false;
     },
 
     handleSelectMark(mark) {

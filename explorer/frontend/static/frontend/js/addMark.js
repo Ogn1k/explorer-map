@@ -62,6 +62,9 @@ function initAddMark(map) {
             }
 
             flagSource.removeFeature(clickedFeature);
+            window.dispatchEvent(new CustomEvent('marks:changed', {
+                detail: { action: 'deleted', id: markId }
+            }));
             return;
         }
 
@@ -86,6 +89,9 @@ function initAddMark(map) {
             feature.set('id', data.id);
         }
         flagSource.addFeature(feature);
+        window.dispatchEvent(new CustomEvent('marks:changed', {
+            detail: { action: 'added', item: data }
+        }));
     });
 
     return { flagSource, flagLayer };

@@ -3,10 +3,10 @@
     <span v-else>☰</span>
 </button>
 
-<div class="sidebar" :class="{ open: sidebarOpen, expanded: showProfile || showMarks }">
+<div class="sidebar" :class="{ open: sidebarOpen, expanded: showProfile || showMarks || showAddMark }">
     <!-- Основное меню -->
     <div class="sidebar-title"></div>
-    <div class="sidebar-buttons" v-if="!showProfile && !showMarks">
+    <div class="sidebar-buttons" v-if="!showProfile && !showMarks && !showAddMark">
 
         <div class="button-item">
             <button class="sidebar-button" @click="handleListMarks"></button>

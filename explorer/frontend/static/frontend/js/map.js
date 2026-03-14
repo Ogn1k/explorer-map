@@ -10,18 +10,17 @@ function initMapApp() {
             const sidebarOpen = ref(false);
             const showProfile = ref(false);
             const showMarks = ref(false);
+            const showAddMark = ref(false);
             const searchQuery = ref('');
             const activeFilter = ref('all');
+            const newMark = ref({
+                title: '',
+                category: '',
+                description: ''
+            });
 
             // Тестовые данные меток
-            const allMarks = ref([
-                { title: 'Кофейня Прима', category: 'Кафе', distance: 120, rating: 4.8 },
-                { title: 'Скамейка у парка', category: 'Скамейки', distance: 250, rating: 4.5 },
-                { title: 'Арт-стена', category: 'Арт', distance: 380, rating: 4.9 },
-                { title: 'Маленькое кафе', category: 'Кафе', distance: 450, rating: 4.6 },
-                { title: 'Деревянная скамейка', category: 'Скамейки', distance: 520, rating: 4.3 },
-                { title: 'Граффити лев', category: 'Арт', distance: 680, rating: 5.0 }
-            ]);
+            const allMarks = ref([]);
 
             const filteredMarks = ref([]);
 
@@ -48,6 +47,65 @@ function initMapApp() {
                 filteredMarks.value = marks;
             };
 
+            const loadMarksFromDb = async () => {
+                const res = await fetch('/api/marks/');
+                if (!res.ok) {
+                    console.error('Failed to load marks list', await res.text());
+                    return;
+                }
+
+                const data = await res.json();
+                if (!data || !Array.isArray(data.items)) {
+                    return;
+                }
+
+                allMarks.value = data.items.map((item) => ({
+                    id: item.id,
+                    title: item.name,
+                    category: 'Без категории',
+                    distance: '',
+                    rating: '',
+                    description: item.description,
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                    created_at: item.created_at
+                }));
+
+                updateFilteredMarks();
+            };
+
+            const upsertMarkInList = (item) => {
+                if (!item || !item.id) {
+                    return;
+                }
+
+                const normalized = {
+                    id: item.id,
+                    title: item.name,
+                    category: 'Без категории',
+                    distance: '',
+                    rating: '',
+                    description: item.description,
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                    created_at: item.created_at
+                };
+
+                const index = allMarks.value.findIndex((m) => m.id === item.id);
+                if (index === -1) {
+                    allMarks.value.push(normalized);
+                } else {
+                    allMarks.value.splice(index, 1, normalized);
+                }
+            };
+
+            const removeMarkFromList = (id) => {
+                if (!id) {
+                    return;
+                }
+                allMarks.value = allMarks.value.filter((m) => m.id !== id);
+            };
+
             const panelCtx = {
                 get sidebarOpen() { return sidebarOpen.value; },
                 set sidebarOpen(v) { sidebarOpen.value = v; },
@@ -57,6 +115,9 @@ function initMapApp() {
 
                 get showMarks() { return showMarks.value; },
                 set showMarks(v) { showMarks.value = v; },
+
+                get showAddMark() { return showAddMark.value; },
+                set showAddMark(v) { showAddMark.value = v; },
 
                 updateFilteredMarks
             };
@@ -69,6 +130,27 @@ function initMapApp() {
             const handleRating = sidePanelHandlers.handleRating.bind(panelCtx);
 
             onMounted(() => {
+                window.addEventListener('marks:changed', (event) => {
+                    const detail = event && event.detail ? event.detail : null;
+                    if (!detail || !detail.action) {
+                        loadMarksFromDb();
+                        return;
+                    }
+
+                    if (detail.action === 'added') {
+                        upsertMarkInList(detail.item);
+                        updateFilteredMarks();
+                        return;
+                    }
+
+                    if (detail.action === 'deleted') {
+                        removeMarkFromList(detail.id);
+                        updateFilteredMarks();
+                        return;
+                    }
+
+                    loadMarksFromDb();
+                });
                 const map = new ol.Map({
                     target: 'map',
                     layers: [
@@ -77,7 +159,7 @@ function initMapApp() {
                         })
                     ],
                     view: new ol.View({
-                        center: ol.proj.fromLonLat([37.6188, 55.7517]), // ?????? (??????)
+                        center: ol.proj.fromLonLat([37.6188, 55.7517]), // Москва (пример)
                         zoom: 10
                     })
                 });
@@ -85,27 +167,51 @@ function initMapApp() {
                 initAddMark(map);
 
                 mapRef.value = map;
-                updateFilteredMarks();
+                loadMarksFromDb();
             });
 
+            // Обработчик сохранения новой метки
+            const handleSaveMark = () => {
+                if (!newMark.value.title || !newMark.value.category) {
+                    alert('Пожалуйста, заполните все обязательные поля');
+                    return;
+                }
+
+                console.warn('Сохранение метки через форму не привязано к базе данных.');
+
+                // Сбрасываем форму
+                newMark.value = {
+                    title: '',
+                    category: '',
+                    description: ''
+                };
+
+                // Закрываем форму добавления
+                showAddMark.value = false;
+                loadMarksFromDb();
+            };
 
 
-            // ???????????????????? ?????? state ?? ????????????
+
+            // Возвращаем все state и методы
             return {
                 mapRef,
                 sidebarOpen,
                 showProfile,
                 showMarks,
+                showAddMark,
                 searchQuery,
                 activeFilter,
                 filteredMarks,
+                newMark,
                 updateFilteredMarks,
                 handleListMarks,
                 handleAddMark,
                 handleProfile,
                 handleBackToMenu,
                 handleSelectMark,
-                handleRating
+                handleRating,
+                handleSaveMark
             };
         }
     };

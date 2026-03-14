@@ -1,0 +1,62 @@
+<div class="add-mark-container" :class="{ active: showAddMark }">
+    <!-- Header -->
+    <div class="add-mark-header">
+        <button class="add-mark-back-btn" @click="handleBackToMenu">
+            <span>←</span> Отмена
+        </button>
+    </div>
+
+    <!-- Title -->
+    <h2 class="add-mark-title">Новая метка</h2>
+
+    <!-- Photo Upload -->
+    <div class="add-mark-photo-upload">
+        <button class="photo-upload-btn">
+            <span class="photo-icon">+ </span>
+            <span>Загрузить фото</span>
+        </button>
+    </div>
+
+    <!-- Form -->
+    <div class="add-mark-form">
+        <!-- Name Field -->
+        <div class="form-group">
+            <label class="form-label">Название</label>
+            <input
+                type="text"
+                class="form-input"
+                placeholder="Скамейка у груда"
+                v-model="newMark.title"
+            >
+        </div>
+
+        <!-- Category Field -->
+        <div class="form-group">
+            <label class="form-label">Категория</label>
+            <select class="form-select" v-model="newMark.category">
+                <option value="">Выберите категорию</option>
+                <option value="Кафе">☕ Кафе</option>
+                <option value="Скамейки">🪑 Скамейки</option>
+                <option value="Арт">🎨 Арт</option>
+                <option value="Парк">🌳 Парк</option>
+                <option value="Музей">🏛️ Музей</option>
+            </select>
+        </div>
+
+        <!-- Description Field -->
+        <div class="form-group">
+            <label class="form-label">Описание</label>
+            <textarea
+                class="form-textarea"
+                placeholder="Тихое место у воды."
+                v-model="newMark.description"
+            ></textarea>
+        </div>
+
+        <!-- Save Button -->
+        <button class="save-btn" @click="handleSaveMark">
+            <span class="save-icon">💾</span>
+            <span>Сохранить</span>
+        </button>
+    </div>
+</div>
