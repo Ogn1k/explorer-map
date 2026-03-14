@@ -48,6 +48,26 @@ function initMapApp() {
                 filteredMarks.value = marks;
             };
 
+            const panelCtx = {
+                get sidebarOpen() { return sidebarOpen.value; },
+                set sidebarOpen(v) { sidebarOpen.value = v; },
+
+                get showProfile() { return showProfile.value; },
+                set showProfile(v) { showProfile.value = v; },
+
+                get showMarks() { return showMarks.value; },
+                set showMarks(v) { showMarks.value = v; },
+
+                updateFilteredMarks
+            };
+
+            const handleListMarks = sidePanelHandlers.handleListMarks.bind(panelCtx);
+            const handleAddMark = sidePanelHandlers.handleAddMark.bind(panelCtx);
+            const handleProfile = sidePanelHandlers.handleProfile.bind(panelCtx);
+            const handleBackToMenu = sidePanelHandlers.handleBackToMenu.bind(panelCtx);
+            const handleSelectMark = sidePanelHandlers.handleSelectMark.bind(panelCtx);
+            const handleRating = sidePanelHandlers.handleRating.bind(panelCtx);
+
             onMounted(() => {
                 const map = new ol.Map({
                     target: 'map',
@@ -57,57 +77,20 @@ function initMapApp() {
                         })
                     ],
                     view: new ol.View({
-                        center: ol.proj.fromLonLat([37.6188, 55.7517]), // Москва (пример)
+                        center: ol.proj.fromLonLat([37.6188, 55.7517]), // ?????? (??????)
                         zoom: 10
                     })
                 });
+
+                initAddMark(map);
 
                 mapRef.value = map;
                 updateFilteredMarks();
             });
 
-            // Обработчики событий боковой панели с правильным контекстом
-            const handleListMarks = () => {
-                console.log('Список меток clicked');
-                showMarks.value = true;
-                showProfile.value = false;
-                updateFilteredMarks();
-            };
 
-            const handleAddMark = () => {
-                console.log('Добавить метку clicked');
-                sidebarOpen.value = false;
-                showProfile.value = false;
-                showMarks.value = false;
-                // Add your logic here
-            };
 
-            const handleProfile = () => {
-                console.log('Профиль clicked');
-                showProfile.value = true;
-                showMarks.value = false;
-            };
-
-            const handleBackToMenu = () => {
-                console.log('Back to menu clicked');
-                showProfile.value = false;
-                showMarks.value = false;
-            };
-
-            const handleSelectMark = (mark) => {
-                console.log('Mark selected:', mark);
-                // Добавьте логику выбора метки на карте
-            };
-
-            const handleRating = () => {
-                console.log('Рейтинг clicked');
-                sidebarOpen.value = false;
-                showProfile.value = false;
-                showMarks.value = false;
-                // Add your logic here
-            };
-
-            // Возвращаем все state и методы
+            // ???????????????????? ?????? state ?? ????????????
             return {
                 mapRef,
                 sidebarOpen,

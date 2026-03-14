@@ -21,4 +21,7 @@ from frontend import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.map_view, name='map'),
+    path('api/marks/', views.list_marks, name='list_marks'),
+    path('api/marks/add/', views.add_mark, name='add_mark'),
+    path('api/marks/delete/', views.delete_mark, name='delete_mark'),
 ]
