@@ -14,6 +14,27 @@ function initAddMark(map) {
         })
     });
 
+    const featureById = new Map();
+    let selectedFeature = null;
+
+    const highlightFeature = (feature) => {
+        if (selectedFeature) {
+            selectedFeature.setStyle(null);
+        }
+        selectedFeature = feature || null;
+        if (selectedFeature) {
+            selectedFeature.setStyle(
+                new ol.style.Style({
+                    text: new ol.style.Text({
+                        text: '🚩',
+                        font: '34px "Segoe UI Emoji", sans-serif',
+                        offsetY: -16
+                    })
+                })
+            );
+        }
+    };
+
     map.addLayer(flagLayer);
 
     const loadExistingMarks = async () => {
@@ -34,6 +55,7 @@ function initAddMark(map) {
                 geometry: new ol.geom.Point(coordinate)
             });
             feature.set('id', item.id);
+            featureById.set(item.id, feature);
             flagSource.addFeature(feature);
         });
     };
@@ -62,6 +84,10 @@ function initAddMark(map) {
             }
 
             flagSource.removeFeature(clickedFeature);
+            featureById.delete(markId);
+            if (selectedFeature === clickedFeature) {
+                highlightFeature(null);
+            }
             window.dispatchEvent(new CustomEvent('marks:changed', {
                 detail: { action: 'deleted', id: markId }
             }));
@@ -87,6 +113,7 @@ function initAddMark(map) {
         });
         if (data && data.id) {
             feature.set('id', data.id);
+            featureById.set(data.id, feature);
         }
         flagSource.addFeature(feature);
         window.dispatchEvent(new CustomEvent('marks:changed', {
@@ -94,5 +121,10 @@ function initAddMark(map) {
         }));
     });
 
-    return { flagSource, flagLayer };
+    return {
+        flagSource,
+        flagLayer,
+        getFeatureById: (id) => featureById.get(id),
+        highlightFeatureById: (id) => highlightFeature(featureById.get(id))
+    };
 }

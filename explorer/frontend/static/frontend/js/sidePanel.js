@@ -6,7 +6,6 @@ const sidePanelHandlers = {
         console.log('Список меток clicked');
         this.showMarks = true;
         this.showProfile = false;
-        this.updateFilteredMarks();
     },
 
     handleAddMark() {

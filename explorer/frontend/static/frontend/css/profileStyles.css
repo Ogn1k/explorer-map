@@ -1,6 +1,6 @@
 /* Profile Container */
 :root {
-    --color-white: white;
+    --color-btn: #1600776e;
     --color-white-solid: rgb(255, 255, 255);
     --color-gray-400: #bdc3c7;
     --color-teal: #1abc9c;
@@ -35,20 +35,21 @@
 .profile-back-btn {
     background: none;
     border: none;
-    color: var(--color-white);
-    font-size: 24px;
+    color: var(--color-btn);
+    font-size: 16px;
     cursor: pointer;
     padding: 0;
-    width: 30px;
-    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    font-weight: 500;
     transition: transform 0.2s ease;
 }
 
 .profile-back-btn:hover {
-    transform: scale(1.2);
+    transform: translateX(-3px);
+    color: #1abc9c;
 }
 
 .profile-header h2 {

@@ -2,7 +2,7 @@
 // Функция создания и инициализации приложения Vue
 
 function initMapApp() {
-    const { createApp, onMounted, ref } = Vue;
+    const { createApp, onMounted, ref, computed } = Vue;
 
     return {
         setup() {
@@ -22,30 +22,28 @@ function initMapApp() {
             // Тестовые данные меток
             const allMarks = ref([]);
 
-            const filteredMarks = ref([]);
-
-            const updateFilteredMarks = () => {
+            const filteredMarks = computed(() => {
                 let marks = allMarks.value;
 
-                // Фильтр по категории
+                // ?????? ?? ?????????
                 if (activeFilter.value !== 'all') {
                     const filterMap = {
-                        'cafe': 'Кафе',
-                        'bench': 'Скамейки',
-                        'art': 'Арт'
+                        'cafe': '????',
+                        'bench': '????????',
+                        'art': '???'
                     };
                     marks = marks.filter(m => m.category === filterMap[activeFilter.value]);
                 }
 
-                // Поиск
+                // ?????
                 if (searchQuery.value) {
                     marks = marks.filter(m =>
                         m.title.toLowerCase().includes(searchQuery.value.toLowerCase())
                     );
                 }
 
-                filteredMarks.value = marks;
-            };
+                return marks;
+            });
 
             const loadMarksFromDb = async () => {
                 const res = await fetch('/api/marks/');
@@ -62,7 +60,7 @@ function initMapApp() {
                 allMarks.value = data.items.map((item) => ({
                     id: item.id,
                     title: item.name,
-                    category: 'Без категории',
+                    category: '??? ?????????',
                     distance: '',
                     rating: '',
                     description: item.description,
@@ -70,8 +68,6 @@ function initMapApp() {
                     longitude: item.longitude,
                     created_at: item.created_at
                 }));
-
-                updateFilteredMarks();
             };
 
             const upsertMarkInList = (item) => {
@@ -119,14 +115,31 @@ function initMapApp() {
                 get showAddMark() { return showAddMark.value; },
                 set showAddMark(v) { showAddMark.value = v; },
 
-                updateFilteredMarks
+                updateFilteredMarks: () => {}
             };
 
             const handleListMarks = sidePanelHandlers.handleListMarks.bind(panelCtx);
             const handleAddMark = sidePanelHandlers.handleAddMark.bind(panelCtx);
             const handleProfile = sidePanelHandlers.handleProfile.bind(panelCtx);
             const handleBackToMenu = sidePanelHandlers.handleBackToMenu.bind(panelCtx);
-            const handleSelectMark = sidePanelHandlers.handleSelectMark.bind(panelCtx);
+            const addMarkApiRef = ref(null);
+
+            const handleSelectMark = (mark) => {
+                if (!mark || !mapRef.value) {
+                    return;
+                }
+
+                const map = mapRef.value;
+                const center = ol.proj.fromLonLat([mark.longitude, mark.latitude]);
+                const view = map.getView();
+                const targetZoom = Math.max(view.getZoom() || 0, 15);
+
+                view.animate({ center, zoom: targetZoom, duration: 500 });
+
+                if (addMarkApiRef.value && mark.id) {
+                    addMarkApiRef.value.highlightFeatureById(mark.id);
+                }
+            };
             const handleRating = sidePanelHandlers.handleRating.bind(panelCtx);
 
             onMounted(() => {
@@ -139,14 +152,12 @@ function initMapApp() {
 
                     if (detail.action === 'added') {
                         upsertMarkInList(detail.item);
-                        updateFilteredMarks();
-                        return;
+                                                return;
                     }
 
                     if (detail.action === 'deleted') {
                         removeMarkFromList(detail.id);
-                        updateFilteredMarks();
-                        return;
+                                                return;
                     }
 
                     loadMarksFromDb();
@@ -164,7 +175,7 @@ function initMapApp() {
                     })
                 });
 
-                initAddMark(map);
+                addMarkApiRef.value = initAddMark(map);
 
                 mapRef.value = map;
                 loadMarksFromDb();
@@ -204,7 +215,6 @@ function initMapApp() {
                 activeFilter,
                 filteredMarks,
                 newMark,
-                updateFilteredMarks,
                 handleListMarks,
                 handleAddMark,
                 handleProfile,
