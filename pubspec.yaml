@@ -35,6 +35,8 @@ dependencies:
     version: ^4.33.1-beta
   geolocator: ^14.0.2
   permission_handler: ^12.0.1
+  sqflite: ^2.3.3
+  path: ^1.9.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -43,6 +45,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  sqflite_common_ffi: ^2.3.3
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -56,7 +59,9 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/ne_110m_admin_0_countries.geojson
+    - assets/ne_10m_admin_1_states_provinces.geojson
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
